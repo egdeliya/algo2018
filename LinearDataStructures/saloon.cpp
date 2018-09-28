@@ -1,60 +1,45 @@
-#include <iostream>
 #include <fstream>
 #include <vector>
+#include <queue>
 
 using namespace std;
 
 const int minPerHour = 60;
 const int workingTime = 20;
 
-struct Client {
-    Client(int hour, int min, int patience):
-        _comingTime(minPerHour * hour + min),
-        _patience(patience) {}
-
-    bool operator<(const Client& r) {
-        if (abs(r._comingTime - _comingTime) > workingTime) return _comingTime < r._comingTime;
-        else {
-            if (r._patience > _patience) return true;
-            else {
-                if (r._patience < _patience) return false;
-                else return _comingTime < r._comingTime;
-            }
-        }
-    }
+class Client {
+public:
 
     friend ifstream& operator>>(ifstream& in, Client& cl) {
-        int hour;
-        int min;
-
-        in >> hour;
-        in >> min;
+        in >> cl._comingHour;
+        in >> cl._comingMin;
         in >> cl._patience;
 
-        cl._comingTime = hour * minPerHour + min;
         return in;
     }
 
-    int _comingTime;
-    int _patience;
-};
-
-void selectSort(vector<Client>& clients) {
-    int cur = 0;
-    int minInd;
-    int ind;
-
-    while (cur < clients.size()) {
-        ind = cur + 1;
-        minInd = cur + 1;
-        while (ind < clients.size()) {
-            if (clients[ind] < clients[cur]) minInd = ind;
-            ind++;
-        }
-        swap(clients[cur], clients[minInd]);
-        cur++;
+    int getComingTime() const {
+        return _comingHour * minPerHour + _comingMin;
     }
-}
+
+    int getPatience() const {
+        return _patience;
+    }
+
+    int getOutTime() {
+        return _outTime;
+    }
+
+    void setOutTime(int time) {
+        _outTime = time;
+    }
+
+private:
+    int _comingMin;
+    int _comingHour;
+    int _patience;
+    int _outTime;
+};
 
 void saloon() {
     ifstream in;
@@ -66,20 +51,47 @@ void saloon() {
     int clientsNum;
     in >> clientsNum;
 
-    vector<Client> clients(clientsNum);
+    queue<Client> clientsInQueue;
+    Client cur;
+    int lastQuitTime = 0;
+
     for (int i = 0; i < clientsNum; ++i) {
-        in >> clients[i];
+        in >> cur;
+
+        while (!clientsInQueue.empty() &&
+               clientsInQueue.front().getOutTime() - cur.getComingTime() <= 0) {
+            clientsInQueue.pop();
+        }
+
+        if (cur.getPatience() < clientsInQueue.size()) {
+            out
+                    << cur.getComingTime() / minPerHour
+                    << " "
+                    << cur.getComingTime() % minPerHour
+                    << endl;
+        } else {
+            if (lastQuitTime == 0 || lastQuitTime <= cur.getComingTime()) {
+                lastQuitTime = cur.getComingTime() + workingTime;
+            } else {
+                lastQuitTime += workingTime;
+            }
+
+            cur.setOutTime(lastQuitTime);
+            clientsInQueue.push(cur);
+            out
+                    << lastQuitTime / minPerHour
+                    << " "
+                    << lastQuitTime % minPerHour
+                    << endl;
+        }
+
     }
-
-    selectSort(clients);
-
 
     in.close();
     out.close();
-
 }
 
-//int main() {
-//    saloon();
-//    return 0;
-//}
+int main() {
+    saloon();
+    return 0;
+}

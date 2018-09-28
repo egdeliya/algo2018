@@ -36,7 +36,6 @@ void postfix() {
     char s;
 
     while (in >> s) {
-//        cout << "sss  " << s << endl;
         switch (s) {
             case '+':
                 buf = processOperation(numbers, add);
@@ -49,7 +48,6 @@ void postfix() {
                 break;
             default: buf = s - '0';
         }
-//        cout << buf << endl;
         numbers.push(buf);
     }
 
@@ -59,14 +57,11 @@ void postfix() {
         out << numbers.top();
     else {
         out << "error";
-//        cout << "size " << numbers.size();
-//        cout << endl << numbers.top();
     }
-//    numbers.pop();
     out.close();
 
 }
-//
+
 //int main() {
 //    postfix();
 //    return 0;

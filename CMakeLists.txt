@@ -3,4 +3,11 @@ project(algo2018)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(algo2018 LinearDataStructures/competition.cpp LinearDataStructures/trucks.cpp LinearDataStructures/postfix.cpp LinearDataStructures/brackets.cpp LinearDataStructures/starWars.cpp LinearDataStructures/queue.cpp)
+add_executable(algo2018 LinearDataStructures/competition.cpp
+        LinearDataStructures/trucks.cpp
+        LinearDataStructures/postfix.cpp
+        LinearDataStructures/brackets.cpp
+        LinearDataStructures/starWars.cpp
+        LinearDataStructures/saloon.cpp
+        LinearDataStructures/queue.cpp
+        LinearDataStructures/min.cpp)

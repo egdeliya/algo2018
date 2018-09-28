@@ -20,7 +20,7 @@ char getPair(char second) {
     return res;
 }
 
-int main() {
+void brackets() {
     ifstream in;
     ofstream out;
     stack<char> st;
@@ -43,7 +43,9 @@ int main() {
                     last = '|';
             } else {
                 out << "NO";
-                return 0;
+                in.close();
+                out.close();
+                return;
             }
         }
     }
@@ -55,5 +57,9 @@ int main() {
 
     in.close();
     out.close();
-    return 0;
 }
+
+//int main() {
+//    brackets();
+//    return 0;
+//}
